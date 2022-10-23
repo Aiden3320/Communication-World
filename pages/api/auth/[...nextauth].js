@@ -86,7 +86,7 @@ export default NextAuth({
         async signIn(user, account, profile) {
             if (user) {
 
-                console.log(user.user.email, user.user.name);
+                console.log("next_auth", user);
                 const response = await fetcher('http://localhost:3000/api/users', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

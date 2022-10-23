@@ -8,6 +8,7 @@ export default function Login({ providers }) {
     const router = useRouter()
     const handleLogIn = async (providerName) => {
         console.log(providerName);
+
         await signIn(providerName.toLowerCase(), { callbackUrl: 'http://localhost:3000/dashboard' });
     }
 
