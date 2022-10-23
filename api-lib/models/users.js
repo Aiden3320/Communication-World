@@ -10,6 +10,16 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    browsers: [{
+        id: {
+            type: String,
+            required: false,
+        },
+        name: {
+            type: String,
+            required: false,
+        }
+    }],
     //   password: {
     //     type: String,
     //     required: true

@@ -4,31 +4,15 @@ async function handler(req, res) {
 
     // res.status(200).json({ name: req.body, name: req.name });
     await connectMongo();
-    let { name, email } = req.body;
-    var randomEmail = Math.random().toString(36).slice(2, 7);
-    // const newemail = randomEmail + email;
-    const newemail = email;
-    console.log(name, newemail);
-
+    let { email } = req.body;
     try {
-        let user = await User.findOne({ email: newemail });
+        let user = await User.findOne({ email }).select("browsers");
         if (user) {
             console.log(user);
-            res.status(200).json({ email: 'AAA' });
+            res.status(200).json(user)
         }
         else {
-            user = new User({
-                name: name,
-                email: newemail,
-                browsers: [
-                    { id: "", name: "" },
-                    { id: "", name: "" },
-                    { id: "", name: "" },
-                    { id: "", name: "" },
-                ]
-            });
-            await user.save();
-            res.status(200).json({ name: 'Register Account' });
+            res.status(200).json('No User');
         }
     } catch (err) {
 

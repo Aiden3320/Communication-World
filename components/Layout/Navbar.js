@@ -2,7 +2,7 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import { useEffect } from 'react';
 import { useRouter } from 'next/router'
 import { useState } from 'react';
-import { createStyles, Navbar, Group, Code, Image, Button, NavLink } from '@mantine/core';
+import { createStyles, Navbar, Group, Code, Image, Button, NavLink, Avatar } from '@mantine/core';
 import {
     IconBellRinging,
     IconFingerprint,
@@ -151,10 +151,10 @@ export default function UserMenu({ initialState }) {
                     }
                 />
                 <NavLink
-                    // component='a'
+                    component='a'
                     label="Browser"
                     description="Additional information"
-                    // href='/sessions'
+                    href='/browsers'
                     icon={
                         <IconScreenShare size="35" variant="filled" color="red">
                         </IconScreenShare>
@@ -167,8 +167,8 @@ export default function UserMenu({ initialState }) {
                     <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
                     <span>Change account</span>
                 </a> */}
-                <a href="#" className={classes.link} onClick={(event) => { event.preventDefault(); signOut(); }}>
-
+                <a href="#" className={classes.link} onClick={(event) => { event.preventDefault(); signOut({ callbackUrl: 'http://localhost:3000/' }); }}>
+                    {session && <Avatar src={session.user.image} alt={session.user.name} style={{ marginRight: "10px" }} />}
                     <IconLogout className={classes.linkIcon} stroke={1.5} />
                     <span>Logout</span>
                 </a>

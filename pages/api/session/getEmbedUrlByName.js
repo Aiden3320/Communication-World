@@ -8,20 +8,19 @@ async function handler(req, res) {
 
     // res.status(200).json({ name: req.body, name: req.name });
     await connectMongo();
-    let { creator, session_id } = req.body;
-    console.log(creator);
+    let { name, email } = req.body;
+    console.log(name, email);
     try {
         let user = await Session.findOne({
-            creator: creator,
-            session_id: session_id,
-        }).select('name session_id isActive');
+            name: name,
+            "users.email": `${email}`,
+        }).select("embed_url");
+        console.log(user);
         if (!user || user.length == 0) {
-            res.status(200).send('No Session or Access is denied');
+            res.status(200).send('No Session or Access is Denied');
         }
         else {
-
-            console.log(user.isActive);
-            res.status(200).send({ user });
+            res.status(200).send(user.embed_url);
         }
     } catch (err) {
         console.error(err.message);

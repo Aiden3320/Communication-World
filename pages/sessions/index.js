@@ -1,6 +1,6 @@
 import React from 'react'
-import { SessionControl } from '../page-components/SessionControl'
-import { Layout, Navbar } from '../components/Layout'
+import { SessionControl } from '../../page-components/SessionControl'
+import { Layout, Navbar } from '../../components/Layout'
 import { Grid, SimpleGrid } from '@mantine/core';
 const SessionPage = () => {
     return (
