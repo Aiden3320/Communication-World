@@ -8,7 +8,7 @@ const SharePage = () => {
         <>
             <Grid>
                 <Grid.Col xs={2}>
-                    <Navbar initialState={'browsers'} /></Grid.Col>
+                    <Navbar initialState={'share'} /></Grid.Col>
                 <Grid.Col xs={10}>
                     <Share></Share>
                 </Grid.Col>
