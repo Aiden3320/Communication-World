@@ -37,9 +37,9 @@ const SessionDetailPage = ({ sessionData }) => {
     return (
         <>
             <Grid>
-                <Grid.Col xs={3}>
+                <Grid.Col xs={2}>
                     <Navbar initialState={'Sessions'} /></Grid.Col>
-                <Grid.Col xs={9}>
+                <Grid.Col xs={10}>
                     <SessionDetail sessionData={sessionData} />
                 </Grid.Col>
             </Grid>

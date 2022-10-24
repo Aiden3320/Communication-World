@@ -5,7 +5,7 @@ import { IconPlus } from '@tabler/icons'
 
 
 
-const Dashboard = () => {
+const UserManagement = () => {
     return (
         <div style={{
             height: '100vh',
@@ -23,4 +23,4 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard
+export default UserManagement

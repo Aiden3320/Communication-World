@@ -4,18 +4,12 @@ import { useRouter } from 'next/router'
 import { useState } from 'react';
 import { createStyles, Navbar, Group, Code, Image, Button, NavLink, Avatar } from '@mantine/core';
 import {
-    IconBellRinging,
-    IconFingerprint,
-    IconKey,
-    IconSettings,
-    Icon2fa,
     IconDatabaseImport,
-    IconReceipt2,
-    IconSwitchHorizontal,
     IconLogout,
     IconUserPlus,
     IconScreenShare,
     IconDashboard,
+    IconShare,
 } from '@tabler/icons';
 import { MantineLogo } from '@mantine/ds';
 
@@ -125,6 +119,7 @@ export default function UserMenu({ initialState }) {
                     label="Dashboard"
                     description="Additional information"
                     href='/dashboard'
+                    active={active == 'dashboard' ? true : false}
                     icon={
                         <IconDashboard size="35" variant="filled" color="red">
                         </IconDashboard>
@@ -135,19 +130,10 @@ export default function UserMenu({ initialState }) {
                     label="Session"
                     description="Additional information"
                     href='/sessions'
+                    active={active == 'sessions' ? true : false}
                     icon={
                         <IconDatabaseImport size="35" variant="filled" color="red">
                         </IconDatabaseImport>
-                    }
-                />
-                <NavLink
-                    // component='a'
-                    label="UserManagement"
-                    description="Additional information"
-                    // href='/sessions'
-                    icon={
-                        <IconUserPlus size="35" variant="filled" color="red">
-                        </IconUserPlus>
                     }
                 />
                 <NavLink
@@ -155,9 +141,32 @@ export default function UserMenu({ initialState }) {
                     label="Browser"
                     description="Additional information"
                     href='/browsers'
+                    active={active == 'browsers' ? true : false}
                     icon={
                         <IconScreenShare size="35" variant="filled" color="red">
                         </IconScreenShare>
+                    }
+                />
+                <NavLink
+                    component='a'
+                    label="Launch"
+                    description="Additional information"
+                    href='/share'
+                    active={active == 'share' ? true : false}
+                    icon={
+                        <IconShare size="35" variant="filled" color="red">
+                        </IconShare>
+                    }
+                />
+                <NavLink
+                    component='a'
+                    label="UserManagement"
+                    description="Additional information"
+                    href='/user'
+                    active={active == 'user' ? true : false}
+                    icon={
+                        <IconUserPlus size="35" variant="filled" color="red">
+                        </IconUserPlus>
                     }
                 />
             </Navbar.Section>

@@ -29,7 +29,6 @@ const SessionControl = () => {
     });
 
     const loadSessions = async () => {
-        console.log(session.user.email);
         const session_data = await fetcher('http://localhost:3000/api/session/getControlSession', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -37,15 +36,16 @@ const SessionControl = () => {
                 creator: session.user.email,
             }),
         });
-        console.log(session_data, "sesson data");
         setData(session_data ? session_data.user : []);
     }
     useEffect(() => {
         if (status == "authenticated") {
+            setIsHandling(true);
             loadSessions();
+            setIsHandling(false);
         }
         console.log(status);
-    }, session);
+    }, [status]);
     const handleCreateNewSession = async (values) => {
         const { name, description } = values;
         console.log(session.user.email, name);

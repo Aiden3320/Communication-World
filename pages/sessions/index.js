@@ -6,9 +6,9 @@ const SessionPage = () => {
     return (
         <>
             <Grid>
-                <Grid.Col xs={3}>
-                    <Navbar initialState={'Sessions'} /></Grid.Col>
-                <Grid.Col xs={9}>
+                <Grid.Col xs={2}>
+                    <Navbar initialState={'sessions'} /></Grid.Col>
+                <Grid.Col xs={10}>
                     <SessionControl />
                 </Grid.Col>
             </Grid>

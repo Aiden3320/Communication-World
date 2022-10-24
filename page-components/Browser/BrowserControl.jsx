@@ -94,7 +94,7 @@ export default function BrowserControl() {
             loadBrowsers();
         }
         console.log(status);
-    }, [session]);
+    }, [status]);
     return (
         <ModalsProvider>
             <div className={classes.container} >
@@ -140,11 +140,9 @@ export default function BrowserControl() {
                                                 {provided.placeholder}
                                             </tr>
                                         )}
-
                                     </Droppable>
                                 ))}
                             </tbody>
-
                         </Table>
                         <Divider my="xl" size={10} color="blue"></Divider>
                         <Text

@@ -6,9 +6,9 @@ const DashboardPage = () => {
     return (
         <>
             <Grid>
-                <Grid.Col xs={3}>
-                    <Navbar initialState={'Dashboard'} /></Grid.Col>
-                <Grid.Col xs={9}> <Dashboard /></Grid.Col>
+                <Grid.Col xs={2}>
+                    <Navbar initialState={'dashboard'} /></Grid.Col>
+                <Grid.Col xs={10}> <Dashboard /></Grid.Col>
 
             </Grid>
 

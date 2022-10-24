@@ -3,12 +3,13 @@ import { BrowserControl } from '../../page-components/Browser'
 import { Layout, Navbar } from '../../components/Layout'
 import { Grid, SimpleGrid } from '@mantine/core';
 const SessionPage = () => {
+
     return (
         <>
             <Grid>
-                <Grid.Col xs={3}>
-                    <Navbar initialState={'Browser'} /></Grid.Col>
-                <Grid.Col xs={9}>
+                <Grid.Col xs={2}>
+                    <Navbar initialState={'browsers'} /></Grid.Col>
+                <Grid.Col xs={10}>
                     <BrowserControl />
                 </Grid.Col>
             </Grid>

@@ -2,6 +2,8 @@ import connectMongo from '../../../api-lib/mongodb';
 import axios from 'axios';
 const User = require('../../../api-lib/models/users');
 const Session = require('../../../api-lib/models/session')
+import { fetcher } from '../../../lib/fetcher';
+
 // ./api/session/getControlSession
 // Get Sessions created by me
 async function handler(req, res) {
@@ -16,6 +18,17 @@ async function handler(req, res) {
             res.status(200).send('No Session created by this user');
         }
         else {
+
+            for (const session of user) {
+                console.log('getAvailable Sessions', session);
+                const resp = await fetcher('http://localhost:3000/api/session/updateSessionStateByID', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        _id: session._id,
+                    }),
+                });
+            }
             res.status(200).send({ user });
         }
     } catch (err) {
