@@ -1,6 +1,6 @@
 import { Layout } from '../components/Layout'
 import { SessionProvider } from "next-auth/react"
-export default function MyApp({
+function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }) {
@@ -11,3 +11,4 @@ export default function MyApp({
     </SessionProvider>
   )
 }
+export default MyApp;
