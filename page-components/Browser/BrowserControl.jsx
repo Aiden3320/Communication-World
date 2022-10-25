@@ -69,8 +69,8 @@ export default function BrowserControl() {
             }),
         });
         console.log(data);
-        loadSessions();
-        loadBrowsers();
+        await loadSessions();
+        await loadBrowsers();
         setIsHandling(false);
 
     }
@@ -79,7 +79,13 @@ export default function BrowserControl() {
             openModal(result.draggableId, result.destination.droppableId);
         console.log(result);
     }
+    const init = async () => {
 
+        setIsHandling(true);
+        await loadSessions();
+        await loadBrowsers();
+        setIsHandling(false);
+    }
     useEffect(() => {
         if (typeof window !== "undefined") {
             {
@@ -90,8 +96,7 @@ export default function BrowserControl() {
     }, []);
     useEffect(() => {
         if (status == "authenticated") {
-            loadSessions();
-            loadBrowsers();
+            init();
         }
         console.log(status);
     }, [status]);

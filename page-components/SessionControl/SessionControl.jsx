@@ -39,11 +39,15 @@ const SessionControl = () => {
         });
         setData(session_data ? session_data.user : []);
     }
+    const init = async () => {
+        setIsHandling(true);
+        await loadSessions();
+        setIsHandling(false);
+
+    }
     useEffect(() => {
         if (status == "authenticated") {
-            setIsHandling(true);
-            loadSessions();
-            setIsHandling(false);
+            init();
         }
         console.log(status);
     }, [status]);
