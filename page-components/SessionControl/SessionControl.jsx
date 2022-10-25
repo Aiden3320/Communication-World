@@ -29,6 +29,7 @@ const SessionControl = () => {
     });
 
     const loadSessions = async () => {
+        console.log("Session Control LoadSessions");
         const session_data = await fetcher('http://localhost:3000/api/session/getControlSession', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

@@ -3,7 +3,6 @@ import { Share } from '../../page-components/Share'
 import { Navbar } from '../../components/Layout'
 import { Grid } from '@mantine/core';
 const SharePage = () => {
-
     return (
         <>
             <Grid>

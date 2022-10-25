@@ -10,6 +10,12 @@ import {
     IconScreenShare,
     IconDashboard,
     IconShare,
+    IconMessage2,
+    IconBuildingCommunity,
+    IconBuildingLighthouse,
+    IconSettingsAutomation,
+    IconKey,
+    IconSettings,
 } from '@tabler/icons';
 import { MantineLogo } from '@mantine/ds';
 
@@ -115,14 +121,38 @@ export default function UserMenu({ initialState }) {
                     <Code sx={{ fontWeight: 700 }}>v1.0.0</Code>
                 </Group>
                 <NavLink
+
+                    label="Community"
+                    icon={
+                        <IconBuildingCommunity size="35" variant="filled" color="red">
+                        </IconBuildingCommunity>
+                    }
+                />
+                <NavLink
+
+                    label="Hacker House"
+                    icon={
+                        <IconBuildingLighthouse size="35" variant="filled" color="red">
+                        </IconBuildingLighthouse>
+                    }
+                />
+                <NavLink
                     component='a'
-                    label="Dashboard"
+                    label="Landing Page"
                     description="Additional information"
                     href='/dashboard'
                     active={active == 'dashboard' ? true : false}
                     icon={
                         <IconDashboard size="35" variant="filled" color="red">
                         </IconDashboard>
+                    }
+                />
+                <NavLink
+
+                    label="Bot Settings"
+                    icon={
+                        <IconSettingsAutomation size="35" variant="filled" color="red">
+                        </IconSettingsAutomation>
                     }
                 />
                 <NavLink
@@ -159,6 +189,14 @@ export default function UserMenu({ initialState }) {
                     }
                 />
                 <NavLink
+
+                    label="Messages"
+                    icon={
+                        <IconMessage2 size="35" variant="filled" color="red">
+                        </IconMessage2>
+                    }
+                />
+                <NavLink
                     component='a'
                     label="UserManagement"
                     description="Additional information"
@@ -167,6 +205,14 @@ export default function UserMenu({ initialState }) {
                     icon={
                         <IconUserPlus size="35" variant="filled" color="red">
                         </IconUserPlus>
+                    }
+                />
+                <NavLink
+
+                    label="Security"
+                    icon={
+                        <IconKey size="35" variant="filled" color="red">
+                        </IconKey>
                     }
                 />
             </Navbar.Section>

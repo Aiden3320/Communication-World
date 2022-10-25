@@ -19,6 +19,7 @@ import {
   Avatar,
   Image,
 } from '@mantine/core';
+
 import { MantineLogo } from '@mantine/ds';
 import { useDisclosure } from '@mantine/hooks';
 

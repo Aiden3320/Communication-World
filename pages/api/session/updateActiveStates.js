@@ -19,7 +19,7 @@ async function handler(req, res) {
             })
             const termination_data = resp.data["termination_date"];
             console.log(session.isActive, termination_data);
-            if (session.isActive == false && termination_data === null) {
+            if (session.isActive == false && termination_data == null) {
                 await Session.findOneAndUpdate(
                     { session_id: session.session_id },
                     {
@@ -35,7 +35,7 @@ async function handler(req, res) {
                     }
                 ).clone();
             }
-            else if (session.isActive == true && termination_data !== null) {
+            else if (session.isActive == true && termination_data != null) {
                 await Session.findOneAndUpdate(
                     { session_id: session.session_id },
                     {

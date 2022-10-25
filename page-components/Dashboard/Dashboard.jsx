@@ -17,7 +17,7 @@ const Dashboard = () => {
                     fontSize: '100px',
                 }}
                 component="span" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }} inherit>
-                Comming Soon
+                Coming Soon
             </Text>
         </div>
     )
