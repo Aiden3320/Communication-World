@@ -3,7 +3,9 @@ import { createStyles, Stack, Burger, Button, Container, ActionIcon, Modal, Pape
 import { Carousel } from '@mantine/carousel';
 import { useForm } from '@mantine/form';
 import { saveAs } from 'file-saver'
-import { IconArrowBigLeft, IconDownload, IconArrowBigRight, IconArrowBigTop, IconArrowBigDown, IconNewSection, IconWorldDownload } from '@tabler/icons';
+import { IconDownload, IconWorldDownload } from '@tabler/icons';
+import { useDisclosure } from '@mantine/hooks';
+import { fetcher } from '../../lib/fetcher'
 const useStyles = createStyles((theme) => ({
     card: {
         height: 440,
@@ -78,30 +80,30 @@ function Card({ image, title, category }) {
 }
 export default function ScrappingComponent({ handleLeftClickEvent, handleRightClickEvent }) {
     const [opened, setOpened] = useState(false);
+    const [isScraping, setIsScraping] = useState(false);
     const title = opened ? 'Close navigation' : 'Open navigation';
     const [clicked, setClicked] = useState(false);
     const [data, setData] = useState([]);
     const [isHandling, setIsHandling] = useState(false);
+    // const [opened, handlers] = useDisclosure(false);
     const handleScrapClick = async () => {
+        setIsScraping(true);
         const url = "http://www.osmschool.com";
         //const url = "https://squarepanda.com/";
-
+        const newData = await fetcher('http://localhost:3000/api/scrap/scrapfromURL', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                url: url
+            }),
+        });
         // const url = "https://squarepanda.com/";
-        console.log('https://scrapperx.herokuapp.com/scrape/' + encodeURIComponent(url));
-        const resp = await fetch('https://scrapperx.herokuapp.com/scrape/' + encodeURIComponent(url)).then((res) => res.json());
-        console.log(resp);
-        if (resp["imgs"]) {
-            let newData = [];
-            resp["imgs"].map((value, index) => {
-                newData = [...newData, {
-                    image: value,
-                }];
-            })
-            setData(newData);
-            setClicked(!clicked);
-            console.log("newData", newData);
+        setData(newData);
+        setIsScraping(false);
 
-        }
+        setClicked(!clicked);
+        // console.log("newData", data);
+
     }
     return (<>
 
@@ -126,9 +128,9 @@ export default function ScrappingComponent({ handleLeftClickEvent, handleRightCl
                     size="700px"
                     opened={clicked}
                     onClose={() => setClicked(false)}
-                    title="Image Scrapped!"
+                // title="Image Scrapped!"
                 >
-
+                    <Text color="teal" size="xl">Teal text</Text>
                     <Carousel
                         slideSize="30%"
                         breakpoints={[{ maxWidth: 'sm', slideSize: '100%', slideGap: 2 }]}
@@ -166,7 +168,8 @@ export default function ScrappingComponent({ handleLeftClickEvent, handleRightCl
                 <Stack align="center">
 
                     <Button size="md" leftIcon={<IconWorldDownload size={15} />}
-                        onClick={handleScrapClick}>
+                        onClick={handleScrapClick}
+                        loading={isScraping}>
                         Scrap
                     </Button>
                 </Stack>
