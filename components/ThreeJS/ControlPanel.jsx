@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { createStyles, Stack, Burger, Button, Container, ActionIcon, Modal, Paper, Text, Title, LoadingOverlay, BackgroundImage } from '@mantine/core';
+import { createStyles, Stack, Burger, Button, Container, ActionIcon, Modal, Paper, Text, Title, LoadingOverlay, Drawer, Box, Grid } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
-import { useForm } from '@mantine/form';
-import { saveAs } from 'file-saver'
-import { IconDownload, IconWorldDownload } from '@tabler/icons';
+import { IconDownload, IconWorldDownload, IconArrowBigLeft, IconArrowBigRight } from '@tabler/icons';
 import { useDisclosure } from '@mantine/hooks';
 import { fetcher } from '../../lib/fetcher'
+import { Box2 } from 'three';
 const useStyles = createStyles((theme) => ({
     card: {
         height: 440,
@@ -78,7 +77,7 @@ function Card({ image, title, category }) {
         </Paper>
     );
 }
-export default function ScrappingComponent({ handleLeftClickEvent, handleRightClickEvent }) {
+export default function ControlPanel({ handleLeftClickEvent, handleRightClickEvent }) {
     const [opened, setOpened] = useState(false);
     const [isScraping, setIsScraping] = useState(false);
     const title = opened ? 'Close navigation' : 'Open navigation';
@@ -116,68 +115,74 @@ export default function ScrappingComponent({ handleLeftClickEvent, handleRightCl
             title={title}
         />
 
-        {
-            opened &&
-            // <BackgroundImage
 
-            //     src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80"
-            //     radius="sm"
-            // >
-            <Container style={{ width: 150, height: 70, position: 'absolute', top: 45, right: 25, backgroundColor: 'whilte', }}>
-                <Modal
-                    size="700px"
-                    opened={clicked}
-                    onClose={() => setClicked(false)}
-                // title="Image Scrapped!"
+        <Drawer opened={opened}
+            // style={{ width: 150, height: 70, position: 'absolute', top: 45, right: 25, backgroundColor: 'whilte', }}
+            position="right"
+            onClose={() => setOpened(false)}
+            closeOnClickOutside={false}
+            closeOnEscape={false}
+            overlayBlur={0}
+            withOverlay={false}
+            overlayOpacity={0}
+            size={250}
+        >
+            <Modal
+                size="700px"
+                opened={clicked}
+                onClose={() => setClicked(false)}
+            // title="Image Scrapped!"
+            >
+                <Text color="teal" size="xl">Teal text</Text>
+                <Carousel
+                    slideSize="30%"
+                    breakpoints={[{ maxWidth: 'sm', slideSize: '100%', slideGap: 2 }]}
+                    slideGap="xl"
+                    align="start"
+                    slidesToScroll={3}
                 >
-                    <Text color="teal" size="xl">Teal text</Text>
-                    <Carousel
-                        slideSize="30%"
-                        breakpoints={[{ maxWidth: 'sm', slideSize: '100%', slideGap: 2 }]}
-                        slideGap="xl"
-                        align="start"
-                        slidesToScroll={3}
-                    >
-                        {data.length >= 1 && data.map((item, index) => (
-                            <Carousel.Slide key={index}>
-                                <Card {...item} />
-                            </Carousel.Slide>
-                        ))}
-                    </Carousel>
+                    {data.length >= 1 && data.map((item, index) => (
+                        <Carousel.Slide key={index}>
+                            <Card {...item} />
+                        </Carousel.Slide>
+                    ))}
+                </Carousel>
 
-                </Modal>
+            </Modal>
 
-                {/* <Text
+            {/*  */}
+            <Stack align="center">
+
+
+                <Text
                     align="center"
                     variant="gradient"
                     gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}
-                    size="sm"
+                    size="xl"
                     weight={700}
                     style={{ fontFamily: 'Greycliff CF, sans-serif' }}
                 >
                     Control Panel
-                </Text> */}
-                {/* <div style={{ display: "flex", justifyContent: "space-between ", margin: "10px 30px 30px 30px" }}>
-                    <ActionIcon onClick={handleLeftClickEvent} variant="light">
-                        <IconArrowBigLeft size={46} />
-                    </ActionIcon>
-                    <ActionIcon onClick={handleRightClickEvent} variant="light">
-                        <IconArrowBigRight size={46} />
-                    </ActionIcon>
-                </div> */}
-                <Stack align="center">
-
-                    <Button size="md" leftIcon={<IconWorldDownload size={15} />}
-                        onClick={handleScrapClick}
-                        loading={isScraping}>
-                        Scrap
-                    </Button>
-                </Stack>
-            </Container>
-            // </BackgroundImage>
-
-        }
-
+                </Text>
+                <Grid justify="space-around">
+                    <Grid.Col span={3} style={{ minWidth: 60 }}>
+                        <ActionIcon size="xl" variant="filled" color="green">
+                            <IconArrowBigLeft size={60} />
+                        </ActionIcon>
+                    </Grid.Col>
+                    <Grid.Col span={3} style={{ minWidth: 60 }}>
+                        <ActionIcon size="xl" variant="filled" color="green">
+                            <IconArrowBigRight size={60} />
+                        </ActionIcon>
+                    </Grid.Col>
+                </Grid>
+                <Button size="md" leftIcon={<IconWorldDownload size={15} />}
+                    onClick={handleScrapClick}
+                    loading={isScraping}>
+                    Scrap
+                </Button>
+            </Stack>
+        </Drawer>
     </>
     )
 }

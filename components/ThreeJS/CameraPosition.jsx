@@ -78,7 +78,6 @@ export default function CameraPosition({ urlData }) {
             [newposVec, newangVec] = getLeft(posVec, angVec);
             fromVec = vecArray[posVec].clone();
             toVec = vecArray[newposVec].clone();
-
             // await dispatch(setBrowserState((browserState + 1) % 4));
         }
         if (type === 2) {

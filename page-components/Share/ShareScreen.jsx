@@ -2,10 +2,10 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { getSession } from 'next-auth/react'
 import { fetcher } from '../../lib/fetcher';
-import { LoadingOverlay, Alert } from '@mantine/core';
+import { LoadingOverlay, Alert, Button } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons';
 import { Space } from './';
-import { ScrappingComponent } from '../../components/ThreeJS'
+import { ControlPanel } from '../../components/ThreeJS'
 export default function ShareScreen() {
     const [browsers, setBrowsers] = useState(null);
     const [isHandling, setIsHandling] = useState(false);
@@ -55,11 +55,11 @@ export default function ShareScreen() {
         loadSession();
     }, []);
     return (
-        <div>
+        <div >
             <LoadingOverlay visible={isHandling} overlayBlur={2} />
             {browsers && browsers.length == 4 ?
                 <Space urlData={browsers} /> : <div>Loading </div>}
-            <ScrappingComponent />
+            <ControlPanel />
         </div >
     )
 }

@@ -11,13 +11,16 @@ import ReactDOM from 'react-dom';
 import { Material } from 'three'
 import { Html, Environment, useGLTF, ContactShadows, OrbitControls } from '@react-three/drei'
 import axios from 'axios'
+import { useDispatch, useSelector } from "react-redux";
+import { setURL } from '../../store/browserSlice';
 
 const TvComponent = lazy(() => import("./TvModel"));
 // import display from './assets/tv_screen.glb';
 let hb;
 export default function Browser(props) {
+    // const authState = useSelector()
+    const dispatch = useDispatch();
     const texture = new THREE.Texture();
-    console.log("browser", props.url);
     const hbContainer = document.createElement('div');
     // const model = useLoader(GLTFLoader, display);
     // const copiedScene = useMemo(() => model.scene.clone(), [model])
@@ -64,6 +67,7 @@ export default function Browser(props) {
                 if (changeInfo.title) {
                     const tabs = await hb.tabs.query({ active: true });
                     console.log(props.bid, tabs[0].url);
+                    dispatch(setURL(tabs[0].url));
                     //                    currentSite.innerText = tabs[0].url;
                 }
             })

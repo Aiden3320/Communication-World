@@ -1,5 +1,5 @@
-import { Layout } from '../components/Layout'
 import { SessionProvider } from "next-auth/react"
+import { wrapper } from "../store/store";
 function MyApp({
   Component,
   pageProps: { session, ...pageProps },
@@ -11,4 +11,5 @@ function MyApp({
     </SessionProvider>
   )
 }
-export default MyApp;
+export default wrapper.withRedux(MyApp);
+//export default MyApp
