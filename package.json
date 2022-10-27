@@ -51,6 +51,7 @@
     "redux-thunk": "^2.4.1",
     "remark": "^14.0.2",
     "remark-html": "^15.0.1",
+    "styled-components": "^5.3.6",
     "three": "^0.145.0"
   },
   "devDependencies": {

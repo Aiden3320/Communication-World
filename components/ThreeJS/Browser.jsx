@@ -12,7 +12,7 @@ import { Material } from 'three'
 import { Html, Environment, useGLTF, ContactShadows, OrbitControls } from '@react-three/drei'
 import axios from 'axios'
 import { useDispatch, useSelector } from "react-redux";
-import { setURL } from '../../store/browserSlice';
+import { setURL, getDataByIndex } from '../../store/browserSlice';
 
 const TvComponent = lazy(() => import("./TvModel"));
 // import display from './assets/tv_screen.glb';
@@ -20,6 +20,7 @@ let hb;
 export default function Browser(props) {
     // const authState = useSelector()
     const dispatch = useDispatch();
+    const browserData = useSelector(getDataByIndex(props.bid));
     const texture = new THREE.Texture();
     const hbContainer = document.createElement('div');
     // const model = useLoader(GLTFLoader, display);
@@ -34,15 +35,16 @@ export default function Browser(props) {
     const title = React.createElement('div', { id: "hbContainer" }, '');
     const { viewport, gl, scene } = useThree();
     let room = ""
-    let embedURL = props.url
-    useFrame(() => {
-    });
     useEffect(() => {
         material.side = THREE.DoubleSide;
         loadBrowser();
     }, []);
 
     const loadBrowser = (async () => {
+        let embedURL = browserData["url"];
+        // let embedURL;
+        console.log("browserData", props.bid, embedURL);
+
         if (embedURL == null || embedURL == "none") return;
         // let flag = false;
         // if (props.bid == "1")
@@ -72,7 +74,7 @@ export default function Browser(props) {
                 }
             })
 
-
+            console.log('hyperbeam');
         }
         catch (err) {
             console.log(err.message);

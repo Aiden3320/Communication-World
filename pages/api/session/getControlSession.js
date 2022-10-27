@@ -20,7 +20,7 @@ async function handler(req, res) {
         else {
 
             for (const session of user) {
-                console.log('getAvailable Sessions', session);
+                console.log('getControlSession Sessions', session);
                 const resp = await fetcher('http://localhost:3000/api/session/updateSessionStateByID', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

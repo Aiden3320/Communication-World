@@ -4,7 +4,7 @@ import { lazy, Suspense } from 'react';
 import { CameraPosition } from '../../components/ThreeJS'
 import { useState, useEffect } from 'react';
 const SkyComponent = lazy(() => import("../../components/ThreeJS/sky"));
-export default function SpaceScreen({ urlData }) {
+export default function SpaceScreen() {
     const [isBrowser, setIsBrowser] = useState(false);
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -28,7 +28,7 @@ export default function SpaceScreen({ urlData }) {
                     <SkyComponent />
 
                     <group >
-                        <CameraPosition urlData={urlData} />
+                        <CameraPosition />
                     </group>
                     <Light />
                 </Suspense>

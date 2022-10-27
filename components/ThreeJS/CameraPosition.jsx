@@ -2,7 +2,8 @@ import React, { useRef, useEffect, useState } from "react";
 import { extend, useThree, useFrame } from '@react-three/fiber';
 
 import { useSpring, animated, config } from "@react-spring/three";
-
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrentBrowser, setBrowser } from "../../store/browserSlice";
 import * as THREE from 'three';
 import { Vector3 } from "three";
 import { Browser } from '.'
@@ -39,11 +40,13 @@ var fromVec, toVec;
 var dvec = new THREE.Vector3(0, 0, -1);
 
 let x = 0;
-export default function CameraPosition({ urlData }) {
+export default function CameraPosition() {
     const { camera } = useThree();
-    console.log('cameraposition', urlData[0]);
+    const dispatch = useDispatch();
+    const bIndex = useSelector(getCurrentBrowser);
     // const [animate, setAnimate] = useState(false);
     var animate = false;
+    let type;
     const getLeft = (x, y) => {
         console.log(x, y, crossArray[x][y]);
         return [crossArray[x][y], y];
@@ -72,7 +75,7 @@ export default function CameraPosition({ urlData }) {
     //     console.log('dispatch Event');
     //     animate = true;
     // }, [browserState])
-    const init = async (type) => {
+    const init = async () => {
         console.log('init caled');
         if (type === 1) {
             [newposVec, newangVec] = getLeft(posVec, angVec);
@@ -102,6 +105,11 @@ export default function CameraPosition({ urlData }) {
                 camera.rotation.set(euler._x, euler._y, euler._z);
 
                 animate = false;
+                if (type === 1)
+                    dispatch(setBrowser((bIndex + 1) % 4));
+                else if (type == 2)
+                    dispatch(setBrowser((bIndex + 3) % 4));
+                else;
             }
         }
 
@@ -116,12 +124,13 @@ export default function CameraPosition({ urlData }) {
         if (animate === false) {
 
             if (e.shiftKey && e.key == 'ArrowLeft') {
-
-                init(2);
+                type = 2;
+                init();
 
             }
             if (e.shiftKey && e.key == 'ArrowRight') {
-                init(1);
+                type = 1;
+                init();
 
             }
         }
@@ -131,15 +140,13 @@ export default function CameraPosition({ urlData }) {
     }, []);
     return (
         <>
-            <Browser bid={1} url={urlData[0]} position={new THREE.Vector3(0, 0, -5)} rotation={new THREE.Euler(0, 0, 0)} />
-            <Browser bid={2} url={urlData[1]} position={new THREE.Vector3(-5, 0, 0)} rotation={new THREE.Euler(0, Math.PI / 2, 0)} />
+            <Browser bid={0} position={new THREE.Vector3(0, 0, -5)} rotation={new THREE.Euler(0, 0, 0)} />
+            <Browser bid={1} position={new THREE.Vector3(-5, 0, 0)} rotation={new THREE.Euler(0, Math.PI / 2, 0)} />
 
-            <Browser bid={3} url={urlData[2]} position={new THREE.Vector3(0, 0, 5)} rotation={new THREE.Euler(0, Math.PI, 0)} />
-            <Browser bid={4} url={urlData[3]} position={new THREE.Vector3(5, 0, 0)} rotation={new THREE.Euler(0, -Math.PI / 2, 0)} />
+            <Browser bid={2} position={new THREE.Vector3(0, 0, 5)} rotation={new THREE.Euler(0, Math.PI, 0)} />
+            <Browser bid={3} position={new THREE.Vector3(5, 0, 0)} rotation={new THREE.Euler(0, -Math.PI / 2, 0)} />
 
 
         </>
     )
 }
-
-

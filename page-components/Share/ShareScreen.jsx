@@ -6,7 +6,10 @@ import { LoadingOverlay, Alert, Button } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons';
 import { Space } from './';
 import { ControlPanel } from '../../components/ThreeJS'
+import { setDataByIndex } from '../../store/browserSlice';
+import { useDispatch } from 'react-redux';
 export default function ShareScreen() {
+    const dispatch = useDispatch();
     const [browsers, setBrowsers] = useState(null);
     const [isHandling, setIsHandling] = useState(false);
     const loadSession = async () => {
@@ -27,22 +30,44 @@ export default function ShareScreen() {
                 for (const browser of userData.browsers) {
                     let embed_URL = "";
                     if (browser.id) {
-                        console.log('AAA', browser.id);
-                        const result = await fetcher('http://localhost:3000/api/session/getEmbedUrlByID', {
+                        const result = await fetcher('http://localhost:3000/api/session/getSessionByID', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 _id: browser.id,
-                                email: session.user.email,
                             })
                         });
                         console.log(result);
-                        data = [...data, result.embed_url];
+                        data = [...data, {
+                            name: result["name"],
+                            url: result["embed_url"]
+                        }];
                     }
                     else
-                        data = [...data, 'No Session'];
+                        data = [...data, {
+                            name: "No Session",
+                            url: "No Session",
+                        }];
                 }
                 //            setBrowsers(userData.browsers);
+                console.log(data);
+                dispatch(setDataByIndex({
+                    index: 0,
+                    data: data[0],
+                }));
+                dispatch(setDataByIndex({
+                    index: 1,
+                    data: data[1],
+                }));
+                dispatch(setDataByIndex({
+                    index: 2,
+                    data: data[2],
+                }));
+                dispatch(setDataByIndex({
+                    index: 3,
+                    data: data[3]
+                }));
+                console.log("SetBrowsers", data);
                 setBrowsers(data);
             }
         }
@@ -58,7 +83,7 @@ export default function ShareScreen() {
         <div >
             <LoadingOverlay visible={isHandling} overlayBlur={2} />
             {browsers && browsers.length == 4 ?
-                <Space urlData={browsers} /> : <div>Loading </div>}
+                <Space /> : <div>Loading </div>}
             <ControlPanel />
         </div >
     )

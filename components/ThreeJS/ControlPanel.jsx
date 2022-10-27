@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { createStyles, Stack, Burger, Button, Container, ActionIcon, Modal, Paper, Text, Title, LoadingOverlay, Drawer, Box, Grid } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
 import { IconDownload, IconWorldDownload, IconArrowBigLeft, IconArrowBigRight } from '@tabler/icons';
-import { useDisclosure } from '@mantine/hooks';
+import { getCurrentBrowser, getCurrentBrowserData, getCurrentURL } from '../../store/browserSlice';
+import { useDispatch, useSelector } from "react-redux";
 import { fetcher } from '../../lib/fetcher'
 import { Box2 } from 'three';
 const useStyles = createStyles((theme) => ({
@@ -78,26 +79,29 @@ function Card({ image, title, category }) {
     );
 }
 export default function ControlPanel({ handleLeftClickEvent, handleRightClickEvent }) {
+    const curBrowser = useSelector(getCurrentBrowserData);
     const [opened, setOpened] = useState(false);
     const [isScraping, setIsScraping] = useState(false);
     const title = opened ? 'Close navigation' : 'Open navigation';
     const [clicked, setClicked] = useState(false);
     const [data, setData] = useState([]);
     const [isHandling, setIsHandling] = useState(false);
-    // const [opened, handlers] = useDisclosure(false);
+    const curURL = useSelector(getCurrentURL);
     const handleScrapClick = async () => {
         setIsScraping(true);
-        const url = "http://www.osmschool.com";
+
+        console.log(curURL);
         //const url = "https://squarepanda.com/";
         const newData = await fetcher('http://localhost:3000/api/scrap/scrapfromURL', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                url: url
+                url: curURL
             }),
         });
         // const url = "https://squarepanda.com/";
         setData(newData);
+        console.log(newData);
         setIsScraping(false);
 
         setClicked(!clicked);
@@ -131,7 +135,6 @@ export default function ControlPanel({ handleLeftClickEvent, handleRightClickEve
                 size="700px"
                 opened={clicked}
                 onClose={() => setClicked(false)}
-            // title="Image Scrapped!"
             >
                 <Text color="teal" size="xl">Teal text</Text>
                 <Carousel
@@ -163,6 +166,16 @@ export default function ControlPanel({ handleLeftClickEvent, handleRightClickEve
                     style={{ fontFamily: 'Greycliff CF, sans-serif' }}
                 >
                     Control Panel
+                </Text>
+                <Text
+                    align="center"
+                    variant="gradient"
+                    gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}
+                    size="xl"
+                    weight={700}
+                    style={{ fontFamily: 'Greycliff CF, sans-serif' }}
+                >
+                    {curBrowser.name}
                 </Text>
                 <Grid justify="space-around">
                     <Grid.Col span={3} style={{ minWidth: 60 }}>

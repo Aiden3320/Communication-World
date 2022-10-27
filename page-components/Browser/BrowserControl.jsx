@@ -6,6 +6,10 @@ import { openConfirmModal } from '@mantine/modals';
 import { useSession } from 'next-auth/react';
 import { fetcher } from '../../lib/fetcher';
 import { IconGripVertical } from '@tabler/icons';
+
+import styled from 'styled-components';
+const Item = styled.tr;
+
 const useStyles = createStyles((theme) => ({
     container: {
         position: 'absoulte',
@@ -75,6 +79,7 @@ export default function BrowserControl() {
 
     }
     const handleOnDragEnd = (result) => {
+        if (!result.destination) return;
         if (result.destination.droppableId !== 'sessions')
             openModal(result.draggableId, result.destination.droppableId);
         console.log(result);
@@ -176,37 +181,72 @@ export default function BrowserControl() {
                                     </tr>
                                 </thead>
 
-                                <Droppable droppableId="sessions" >
+                                <Droppable droppableId="sessions" isDropDisabled={true}>
                                     {(provided, snapshot) => (
-                                        <tbody  {...provided.droppableProps} ref={provided.innerRef}>
+                                        <tbody ref={provided.innerRef}>
                                             {session_data && session_data.map((session, index) => (
                                                 <Draggable
                                                     key={session.name}
                                                     draggableId={session._id}
                                                     index={index}>
-                                                    {(provided) => (
-                                                        <tr ref={provided.innerRef}
-                                                            {...provided.draggableProps}
-                                                        >
-                                                            <td>
-                                                                <div
-                                                                    {...provided.dragHandleProps} >
-                                                                    <IconGripVertical size={18} stroke={1.5} />
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                {session._id}
-                                                            </td>
-                                                            <td>
-                                                                {session.name}
-                                                            </td>
-                                                            <td>
-                                                                {session.creator}
-                                                            </td>
-                                                            <td>
-                                                                {session.isActive == true ? "Active" : "Dead"}
-                                                            </td>
-                                                        </tr>
+                                                    {(provided, snapshot) => (
+                                                        <>
+                                                            <tr ref={provided.innerRef}
+                                                                {...provided.draggableProps}
+                                                                isDragging={snapshot.isDragging}
+                                                                style={
+                                                                    provided.draggableProps
+                                                                        .style
+                                                                }
+                                                            >
+                                                                <td>
+                                                                    <div
+                                                                        {...provided.dragHandleProps} >
+                                                                        <IconGripVertical size={18} stroke={1.5} />
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    {session._id}
+                                                                </td>
+                                                                <td>
+                                                                    {session.name}
+                                                                </td>
+                                                                <td>
+                                                                    {session.creator}
+                                                                </td>
+                                                                <td>
+                                                                    {session.isActive == true ? "Active" : "Dead"}
+                                                                </td>
+                                                            </tr>
+                                                            {snapshot.isDragging && (
+
+                                                                <tr style={{
+                                                                    display: "none !important",
+                                                                    transform: "none !important",
+                                                                }}
+                                                                >
+                                                                    <td>
+                                                                        <div>
+                                                                            <IconGripVertical size={18} stroke={1.5} />
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        {session._id}
+                                                                    </td>
+                                                                    <td>
+                                                                        {session.name}
+                                                                    </td>
+                                                                    <td>
+                                                                        {session.creator}
+                                                                    </td>
+                                                                    <td>
+                                                                        {session.isActive == true ? "Active" : "Dead"}
+                                                                    </td>
+                                                                </tr>
+                                                            )}
+                                                        </>
+
+
                                                     )}
                                                 </Draggable>
                                             ))}
