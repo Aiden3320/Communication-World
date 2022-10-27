@@ -124,7 +124,7 @@ export default function UserMenu({ initialState }) {
 
                     label="Community"
                     icon={
-                        <IconBuildingCommunity size="35" variant="filled" color="red">
+                        <IconBuildingCommunity size="35" variant="filled" color="green">
                         </IconBuildingCommunity>
                     }
                 />
@@ -143,7 +143,7 @@ export default function UserMenu({ initialState }) {
                     href='/dashboard'
                     active={active == 'dashboard' ? true : false}
                     icon={
-                        <IconDashboard size="35" variant="filled" color="red">
+                        <IconDashboard size="35" variant="filled" color="blue">
                         </IconDashboard>
                     }
                 />

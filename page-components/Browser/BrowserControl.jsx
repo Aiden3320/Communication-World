@@ -73,7 +73,7 @@ export default function BrowserControl() {
             }),
         });
         console.log(data);
-        await loadSessions();
+        // await loadSessions();
         await loadBrowsers();
         setIsHandling(false);
 

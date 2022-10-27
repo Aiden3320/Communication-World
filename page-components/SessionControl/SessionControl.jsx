@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { ScrollArea, Table, LoadingOverlay, createStyles, Container, Checkbox, ActionIcon, Footer, Button, Modal, Text, TextInput, SimpleGrid, Textarea } from '@mantine/core';
 import { IconPlus, IconListDetails, IconActivity } from '@tabler/icons';
 import { useSession } from 'next-auth/react';
@@ -13,6 +13,7 @@ const useStyles = createStyles((theme) => ({
 }));
 const SessionControl = () => {
     const { data: session, status } = useSession();
+    const [email, setEmail] = useState("");
     const [opened, setOpened] = useState(false);
     const [isHandling, setIsHandling] = useState(false);
     const { classes, theme } = useStyles();
@@ -36,29 +37,32 @@ const SessionControl = () => {
         },
     });
 
-    const loadSessions = async () => {
+    const loadSessions = useCallback(async () => {
         console.log("Session Control LoadSessions");
         const session_data = await fetcher('http://localhost:3000/api/session/getControlSession', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                creator: session.user.email,
+                creator: email,
             }),
         });
         setData(session_data ? session_data.user : []);
-    }
-    const init = async () => {
+    }, [email]);
+    const init = useCallback(async () => {
         setIsHandling(true);
         await loadSessions();
         setIsHandling(false);
 
-    }
+    }, [loadSessions]);
     useEffect(() => {
+
         if (status == "authenticated") {
+            setEmail(session.user.email);
             init();
         }
         console.log(status);
-    }, [status]);
+    }, [status, init]);
+
     const handleCreateNewSession = async (values) => {
         const { name, description } = values;
         console.log(session.user.email, name);
@@ -73,7 +77,7 @@ const SessionControl = () => {
         });
         console.log(response)
         setOpened(false);
-        loadSessions();
+        await loadSessions();
         setIsHandling(false);
     }
     const handleActivateSession = async (_id) => {
@@ -87,7 +91,7 @@ const SessionControl = () => {
                 _id: _id,
             }),
         });
-        loadSessions();
+        await loadSessions();
         setIsHandling(false);
     }
     const handleKillSession = async (_id) => {
