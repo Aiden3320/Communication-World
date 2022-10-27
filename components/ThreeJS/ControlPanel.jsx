@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { createStyles, Stack, Burger, Button, Container, ActionIcon, Modal, Paper, Text, Title, LoadingOverlay, Drawer, Box, Grid } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
 import { IconDownload, IconWorldDownload, IconArrowBigLeft, IconArrowBigRight } from '@tabler/icons';
-import { getCurrentBrowser, getCurrentBrowserData, getCurrentURL } from '../../store/browserSlice';
+import { getCurrentBrowser, getCurrentBrowserData, getCurrentURL, setCommand, getCommand } from '../../store/browserSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { fetcher } from '../../lib/fetcher'
 import { Box2 } from 'three';
@@ -79,14 +79,16 @@ function Card({ image, title, category }) {
     );
 }
 export default function ControlPanel({ handleLeftClickEvent, handleRightClickEvent }) {
+    const dispatch = useDispatch();
     const curBrowser = useSelector(getCurrentBrowserData);
+    const curURL = useSelector(getCurrentURL);
+    const curCommand = useSelector(getCommand);
     const [opened, setOpened] = useState(false);
     const [isScraping, setIsScraping] = useState(false);
     const title = opened ? 'Close navigation' : 'Open navigation';
     const [clicked, setClicked] = useState(false);
     const [data, setData] = useState([]);
     const [isHandling, setIsHandling] = useState(false);
-    const curURL = useSelector(getCurrentURL);
     const handleScrapClick = async () => {
         setIsScraping(true);
 
@@ -107,6 +109,14 @@ export default function ControlPanel({ handleLeftClickEvent, handleRightClickEve
         setClicked(!clicked);
         // console.log("newData", data);
 
+    }
+    const handleCommand = async (type) => {
+        if (curCommand.handle == 1)
+            return;
+        dispatch(setCommand({
+            type: type,
+            handling: 1,
+        }))
     }
     return (<>
 
@@ -175,16 +185,26 @@ export default function ControlPanel({ handleLeftClickEvent, handleRightClickEve
                     weight={700}
                     style={{ fontFamily: 'Greycliff CF, sans-serif' }}
                 >
-                    {curBrowser.name}
+                    Browser {curBrowser.index}
+                </Text>
+                <Text
+                    align="center"
+                    variant="gradient"
+                    gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}
+                    size="xl"
+                    weight={700}
+                    style={{ fontFamily: 'Greycliff CF, sans-serif' }}
+                >
+                    {curBrowser.data.name}
                 </Text>
                 <Grid justify="space-around">
                     <Grid.Col span={3} style={{ minWidth: 60 }}>
-                        <ActionIcon size="xl" variant="filled" color="green">
+                        <ActionIcon size="xl" variant="filled" color="green" onClick={() => handleCommand(1)}>
                             <IconArrowBigLeft size={60} />
                         </ActionIcon>
                     </Grid.Col>
                     <Grid.Col span={3} style={{ minWidth: 60 }}>
-                        <ActionIcon size="xl" variant="filled" color="green">
+                        <ActionIcon size="xl" variant="filled" color="green" onClick={() => handleCommand(2)}>
                             <IconArrowBigRight size={60} />
                         </ActionIcon>
                     </Grid.Col>

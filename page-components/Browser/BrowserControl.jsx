@@ -59,7 +59,7 @@ export default function BrowserControl() {
         ),
         labels: { confirm: 'Confirm', cancel: 'Cancel' },
         onConfirm: () => handleSetSessionToBrowser(session_id, browser_id),
-        OnCancel: () => console.log('Canceld'),
+        onCancel: () => console.log('Canceld'),
     });
     const handleSetSessionToBrowser = async (session_id, browser_id) => {
         setIsHandling(true);

@@ -8,11 +8,10 @@ async function handler(req, res) {
 
     // res.status(200).json({ name: req.body, name: req.name });
     await connectMongo();
-    let { creator, _id } = req.body;
-    console.log(creator);
+    let { _id } = req.body;
     try {
         let session = await Session.findOne({
-            creator: creator,
+
             _id: _id,
         });
         //.select('name session_id isActive');
@@ -23,29 +22,22 @@ async function handler(req, res) {
             const resp = await axios.get(`https://engine.hyperbeam.com/v0/vm/{${session.session_id}}`, {
                 headers: {
                     'Authorization': `Bearer ${process.env.HYPERBEAM_KEY}`,
-                }
+                },
             })
             const termination_data = resp.data["termination_date"];
             console.log(termination_data);
-            if (termination_data !== null) {
-                console.log("Session Ended! Activating");
-                console.log("typeof", typeof (session.session_id));
-                const resp = await axios.post('https://engine.hyperbeam.com/v0/vm', {}, {
+            if (termination_data === null) {
+                console.log("Session is active! Deactivating", session.session_id);
+                const resp = await axios.delete(`https://engine.hyperbeam.com/v0/vm/{${session.session_id}}`, {
                     headers: {
                         'Authorization': `Bearer ${process.env.HYPERBEAM_KEY}`
                     },
-                    body: {
-                        'profile.save': 'true',
-                        'profile.load': session.session_id,
-                    }
                 })
-                console.log(resp);
                 await Session.findOneAndUpdate(
                     { _id: _id },
                     {
-                        isActive: true,
-                        session_id: resp.data.session_id,
-                        embed_url: resp.data.embed_url,
+                        isActive: false,
+                        embed_url: "none",
                     },
                     function (error, success) {
                         if (error) {

@@ -8,18 +8,17 @@ import { extend } from '@react-three/fiber'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Canvas, useThree, useFrame, useLoader, useUpdate } from '@react-three/fiber'
 import ReactDOM from 'react-dom';
-import { Material } from 'three'
-import { Html, Environment, useGLTF, ContactShadows, OrbitControls } from '@react-three/drei'
-import axios from 'axios'
 import { useDispatch, useSelector } from "react-redux";
-import { setURL, getDataByIndex } from '../../store/browserSlice';
+import { setURL, getDataByIndex, getCurrentBrowser } from '../../store/browserSlice';
 
+import { useWindowEvent } from '@mantine/hooks';
 const TvComponent = lazy(() => import("./TvModel"));
 // import display from './assets/tv_screen.glb';
 let hb;
 export default function Browser(props) {
     // const authState = useSelector()
     const dispatch = useDispatch();
+    const curBrowser = useSelector(getCurrentBrowser);
     const browserData = useSelector(getDataByIndex(props.bid));
     const texture = new THREE.Texture();
     const hbContainer = document.createElement('div');
@@ -39,7 +38,21 @@ export default function Browser(props) {
         material.side = THREE.DoubleSide;
         loadBrowser();
     }, []);
-
+    useWindowEvent('keydown', (event) => {
+        if (curBrowser == props.bid && hb && hb.tabs) {
+            hb.sendEvent(event);
+        }
+    });
+    useWindowEvent('keyup', (event) => {
+        if (curBrowser == props.bid && hb && hb.tabs) {
+            hb.sendEvent(event);
+        }
+    });
+    useWindowEvent('contextmenu', (event) => {
+        if (curBrowser == props.bid && hb && hb.tabs) {
+            event.preventDefault();
+        }
+    });
     const loadBrowser = (async () => {
         let embedURL = browserData["url"];
         // let embedURL;
@@ -51,7 +64,7 @@ export default function Browser(props) {
         //     flag = true;
         try {
             hb = await Hyperbeam(hbContainer, embedURL, {
-                // delegateKeyboard: flag,
+                delegateKeyboard: false,
                 frameCb: (frame) => {
                     if (texture.image === null) {
                         if (frame.constructor === HTMLVideoElement) {
@@ -88,7 +101,7 @@ export default function Browser(props) {
             case "pointermove":
                 eventtype = "mousemove";
                 break;
-            case "click":
+            case "pointerdown":
                 eventtype = "mousedown";
                 break;
             case "pointerup":
@@ -102,7 +115,7 @@ export default function Browser(props) {
                 break;
         }
         meshobject.current.worldToLocal(point);
-        if (hb) {
+        if (hb && e.eventtype != "") {
             hb.sendEvent({
                 type: eventtype,
                 x: point.x / width + 0.5,
@@ -121,6 +134,7 @@ export default function Browser(props) {
                 onClick={handleMouseEvent}
                 onPointerMove={handleMouseEvent}
                 onPointerUp={handleMouseEvent}
+                onPointerDown={handleMouseEvent}
                 onContextMenu={handleMouseEvent}
                 ref={meshobject}
                 geometry={geometry}

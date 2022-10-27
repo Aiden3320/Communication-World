@@ -15,7 +15,11 @@ const initialState = {
     }, {
         name: "",
         url: "",
-    }]
+    }],
+    command: {
+        type: 0,
+        handling: 0,
+    }
 }
 
 export const browserSlice = createSlice({
@@ -32,6 +36,9 @@ export const browserSlice = createSlice({
             state.data[action.payload.index] = action.payload.data;
             // state.data = action.payload;
         },
+        setCommand(state, action) {
+            state.command = action.payload;
+        },
         extraReducers: {
             [HYDRATE]: (state, action) => {
                 return {
@@ -42,12 +49,18 @@ export const browserSlice = createSlice({
         },
     },
 })
-export const { setURL, setBrowser, setDataByIndex } = browserSlice.actions;
+export const { setURL, setBrowser, setDataByIndex, setCommand } = browserSlice.actions;
 export const getCurrentURL = (state) => state.browser.curUrl;
 export const getCurrentBrowser = (state) => state.browser.curBrowser;
-export const getCurrentBrowserData = (state) => state.browser.data[state.browser.curBrowser];
+export const getCurrentBrowserData = (state) => {
+    return {
+        index: state.browser.curBrowser,
+        data: state.browser.data[state.browser.curBrowser],
+    };
+};
 export const getDataByIndex = id => state => {
     return state.browser.data[id];
 }
+export const getCommand = (state) => state.browser.command;
 
 export default browserSlice.reducer;

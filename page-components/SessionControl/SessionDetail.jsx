@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { List, ThemeIcon, LoadingOverlay, Modal, Button, Grid, Container, createStyles, Text, TextInput, SimpleGrid, Textarea, ScrollArea } from '@mantine/core';
-import { IconArrowBack, IconCircleCheck } from '@tabler/icons';
+import { IconArrowBack, IconActivity, IconCircleCheck } from '@tabler/icons';
 import { IconPlus } from '@tabler/icons';
 import { useSession } from 'next-auth/react';
 import { useForm } from '@mantine/form';
 import { fetcher } from '../../lib/fetcher';
+// Users with a higher priority will preempt the control of lower priority users.
+import { useWindowEvent } from '@mantine/hooks';
 const useStyles = createStyles((theme) => ({
     container: {
         display: 'flex',
@@ -19,6 +21,35 @@ const SessionDetail = ({ sessionData }) => {
     const { classes, theme } = useStyles();
     const [users, setUser] = useState([]);
     const [detailData, setDetailData] = useState(sessionData);
+
+    const handleActivateSession = async (_id) => {
+        console.log(_id);
+        setIsHandling(true);
+        const response = await fetcher('/api/session/activateSessionByID', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                creator: session.user.email,
+                _id: _id,
+            }),
+        });
+        loadSessionDetail();
+        setIsHandling(false);
+    }
+    const handleKillSession = async (_id) => {
+
+        console.log(_id);
+        setIsHandling(true);
+        const response = await fetcher('/api/session/killSessionByID', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                _id: _id,
+            }),
+        });
+        loadSessionDetail();
+        setIsHandling(false);
+    }
     const form = useForm({
         initialValues: {
             email: '',
@@ -27,7 +58,9 @@ const SessionDetail = ({ sessionData }) => {
             email: (value) => (value.length < 1 ? 'Name Field Required' : null),
         },
     });
-
+    useWindowEvent('keydown', (event) => {
+        console.log(event);
+    });
     const loadSessionDetail = async () => {
         console.log("loadSessionDetail", detailData);
         const response = await fetcher('http://localhost:3000/api/session/getSessionByID', {
@@ -120,11 +153,29 @@ const SessionDetail = ({ sessionData }) => {
                     <Grid.Col span={9}>
                         <Text size="xl">ASKDSJAKLD</Text>
                     </Grid.Col>
-                    <Grid.Col span={12}>
 
-                        <Text size="xl">Users</Text>
+                    <Grid.Col span={3}>
+                        <Text size="xl">Session Status</Text>
                     </Grid.Col>
-                    <Grid.Col span={6} offset={1}>
+                    <Grid.Col span={3}>
+                        {detailData.isActive ?
+                            <Text size="xl">Active</Text>
+                            :
+                            <Text size="xl">Dead</Text>
+                        }
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                        {detailData.isActive ?
+                            <Button leftIcon={<IconActivity />} onClick={() => handleKillSession(session._id)} color="red"> Stop</Button>
+                            :
+                            <Button leftIcon={<IconActivity />} onClick={() => handleActivateSession(session._id)}> Activate</Button>
+                        }
+                    </Grid.Col>
+                    <Grid.Col span={3}>
+
+                        <Text size="xl">Session Users</Text>
+                    </Grid.Col>
+                    <Grid.Col span={6} >
                         {
                             console.log(detailData.users.length)
                         }

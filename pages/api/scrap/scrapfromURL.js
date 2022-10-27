@@ -18,7 +18,7 @@ async function handler(req, res) {
             res.status(200).send(newData);
         }
         else
-            res.status(200).send(resp);
+            res.status(500).send('Server Error');
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

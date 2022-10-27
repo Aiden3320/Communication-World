@@ -21,7 +21,7 @@ async function handler(req, res) {
                     'Authorization': `Bearer ${process.env.HYPERBEAM_KEY}`
                 },
                 body: {
-                    'profile.save': true,
+                    'profile.save': 'true',
                 }
             })
             let newSession = new Session({

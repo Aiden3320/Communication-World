@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollArea, Table, LoadingOverlay, createStyles, Container, Group, ActionIcon, Footer, Button, Modal, Text, TextInput, SimpleGrid, Textarea } from '@mantine/core';
+import { ScrollArea, Table, LoadingOverlay, createStyles, Container, Checkbox, ActionIcon, Footer, Button, Modal, Text, TextInput, SimpleGrid, Textarea } from '@mantine/core';
 import { IconPlus, IconListDetails, IconActivity } from '@tabler/icons';
 import { useSession } from 'next-auth/react';
 import { useForm } from '@mantine/form';
@@ -17,6 +17,14 @@ const SessionControl = () => {
     const [isHandling, setIsHandling] = useState(false);
     const { classes, theme } = useStyles();
     const [data, setData] = useState([]);
+
+    // const [selection, setSelection] = useState(['1']);
+    // const toggleRow = (_id) =>
+    //     setSelection((current) =>
+    //         current.includes(_id) ? current.filter((item) => item !== _id) : [...current, _id]
+    //     );
+    // const toggleAll = () =>
+    //     setSelection((current) => (current.length === data.length ? [] : data.map((item) => item._id)));
     const form = useForm({
         initialValues: {
             name: '',
@@ -82,6 +90,20 @@ const SessionControl = () => {
         loadSessions();
         setIsHandling(false);
     }
+    const handleKillSession = async (_id) => {
+
+        console.log(_id);
+        setIsHandling(true);
+        const response = await fetcher('/api/session/killSessionByID', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                _id: _id,
+            }),
+        });
+        loadSessions();
+        setIsHandling(false);
+    }
     return (
 
         <div className={classes.container} >
@@ -139,6 +161,14 @@ const SessionControl = () => {
                     <Table striped withColumnBorders sx={{ minWidth: 800 }} verticalSpacing="xs">
                         <thead>
                             <tr>
+                                {/* <th style={{ width: 40 }}>
+                                    <Checkbox
+                                        onChange={toggleAll}
+                                        checked={selection.length === data.length}
+                                        indeterminate={selection.length > 0 && selection.length !== data.length}
+                                        transitionDuration={0}
+                                    />
+                                </th> */}
                                 <th>Name</th>
                                 <th>Users</th>
                                 <th>Active</th>
@@ -147,31 +177,43 @@ const SessionControl = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data && data.map((session, index) => (
-                                <tr key={index}>
-                                    <td>
-                                        {session.name}
-                                    </td>
-                                    <td>
-                                        {session.users.length == 0 ? "No Available Users" : session.users.length + ' Users'}
-                                    </td>
-                                    <td>
-                                        {session.isActive == true ? "Active" : "Dead"}
-                                    </td>
-                                    <td>
-                                        {session.isActive ?
-                                            <Button leftIcon={<IconActivity />} color="red"> Stop</Button>
-                                            :
-                                            <Button leftIcon={<IconActivity />} onClick={() => handleActivateSession(session._id)}> Activate</Button>
-                                        }
-                                    </td>
-                                    <td >
-                                        <Button leftIcon={<IconListDetails />} color="green" component='a' href={`./sessions/${session._id}`}>Details</Button>
-                                    </td>
+                            {data && data.map((session, index) => {
+                                // const selected = selection.includes(session._id);
+                                return (
+                                    <tr key={index}>
+                                        {/* <td>
+                                            <td>
+                                                <Checkbox
+                                                    checked={selection.includes(session._id)}
+                                                    onChange={() => toggleRow(session._id)}
+                                                    transitionDuration={0}
+                                                />
+                                            </td>
+                                        </td> */}
+                                        <td>
+                                            {session.name}
+                                        </td>
+                                        <td>
+                                            {session.users.length == 0 ? "No Available Users" : session.users.length + ' Users'}
+                                        </td>
+                                        <td>
+                                            {session.isActive == true ? "Active" : "Dead"}
+                                        </td>
+                                        <td>
+                                            {session.isActive ?
+                                                <Button leftIcon={<IconActivity />} onClick={() => handleKillSession(session._id)} color="red"> Stop</Button>
+                                                :
+                                                <Button leftIcon={<IconActivity />} onClick={() => handleActivateSession(session._id)}> Activate</Button>
+                                            }
+                                        </td>
+                                        <td >
+                                            <Button leftIcon={<IconListDetails />} color="green" component='a' href={`./sessions/${session._id}`}>Details</Button>
+                                        </td>
 
 
-                                </tr>
-                            ))}
+                                    </tr>
+                                )
+                            })}
                         </tbody>
 
                     </Table>
