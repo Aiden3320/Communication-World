@@ -2,9 +2,11 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import { useEffect } from 'react';
 import { useRouter } from 'next/router'
 import { useState } from 'react';
-import { createStyles, Navbar, Group, Code, Image, Button, NavLink, Avatar } from '@mantine/core';
+import { createStyles, Navbar, Group, Code, Image, Button, NavLink, Avatar, TextInput, ActionIcon, Switch, useMantineColorScheme, useMantineTheme } from '@mantine/core';
 import {
     IconDatabaseImport,
+    IconSun,
+    IconMoonStars,
     IconLogout,
     IconUserPlus,
     IconScreenShare,
@@ -15,20 +17,32 @@ import {
     IconBuildingLighthouse,
     IconSettingsAutomation,
     IconKey,
-    IconSettings,
+    IconSearch,
 } from '@tabler/icons';
 import { MantineLogo } from '@mantine/ds';
 
 const useStyles = createStyles((theme, _params, getRef) => {
     const icon = getRef('icon');
     return {
+        container: {
+            backgroundColor: theme.colors.gray[1],
+        },
         header: {
             paddingBottom: theme.spacing.md,
             marginBottom: theme.spacing.md * 1.5,
             borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
                 }`,
         },
+        section: {
+            marginLeft: -theme.spacing.md,
+            marginRight: -theme.spacing.md,
+            marginBottom: theme.spacing.md,
 
+            '&:not(:last-of-type)': {
+                borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+                    }`,
+            },
+        },
         footer: {
             paddingTop: theme.spacing.md,
             marginTop: theme.spacing.md,
@@ -87,7 +101,8 @@ const data = [
 ];
 
 export default function UserMenu({ initialState }) {
-
+    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+    const theme = useMantineTheme();
     const { classes, cx } = useStyles();
     const [active, setActive] = useState(initialState);
     const { data: session, status } = useSession()
@@ -98,112 +113,116 @@ export default function UserMenu({ initialState }) {
             router.push('./')
         }
     }, [status]);
-    const links = data.map((item) => (
-        <a
-            className={cx(classes.link, { [classes.linkActive]: item.label === active })}
-            href={item.link}
-            key={item.label}
-            onClick={(event) => {
-                setActive(item.label);
-            }}
-
-        >
-            <item.icon className={classes.linkIcon} stroke={1.5} />
-            <span>{item.label}</span>
-        </a >
-    ));
-
     return (
-        <Navbar height={'100vh'} p="md">
-            <Navbar.Section grow>
-                <Group className={classes.header} position="apart">
-                    <Image alt="" src="/logo/Group_157.png" width={70} height={50} />
-                    <Code sx={{ fontWeight: 700 }}>v1.0.0</Code>
-                </Group>
+        <Navbar height={'100vh'} p="md" className={classes.container}>
+
+            <Group className={classes.header} position="apart">
+                <Image alt="" src="/logo/Group_157.png" width={70} height={50} />
+                <Code sx={{ fontWeight: 700 }}>v1.0.0</Code>
+            </Group>
+            <TextInput
+                placeholder="Search"
+                size="xs"
+                icon={<IconSearch size={12} stroke={1.5} />}
+                rightSectionWidth={70}
+                rightSection={<Code className={classes.searchCode}>Ctrl + K</Code>}
+                styles={{ rightSection: { pointerEvents: 'none' } }}
+                mb="sm"
+            />
+            <Navbar.Section grow calssame={classes.section}>
                 <NavLink
 
                     label="Community"
+                    className={classes.link}
                     icon={
-                        <IconBuildingCommunity size="35" variant="filled" color="green">
+                        <IconBuildingCommunity size="20" variant="filled" color="green">
                         </IconBuildingCommunity>
                     }
                 />
                 <NavLink
 
                     label="Hacker House"
+                    className={classes.link}
                     icon={
-                        <IconBuildingLighthouse size="35" variant="filled" color="red">
+                        <IconBuildingLighthouse size="20" variant="filled" color="blue">
                         </IconBuildingLighthouse>
                     }
                 />
                 <NavLink
                     component='a'
                     label="Landing Page"
+                    className={classes.link}
                     description="Additional information"
                     href='/dashboard'
                     active={active == 'dashboard' ? true : false}
                     icon={
-                        <IconDashboard size="35" variant="filled" color="blue">
+                        <IconDashboard size="20" variant="filled" color="royalblue">
                         </IconDashboard>
                     }
                 />
                 <NavLink
 
+                    className={classes.link}
                     label="Bot Settings"
                     icon={
-                        <IconSettingsAutomation size="35" variant="filled" color="red">
+                        <IconSettingsAutomation size="20" variant="filled" color="indigo ">
                         </IconSettingsAutomation>
                     }
                 />
                 <NavLink
                     component='a'
                     label="Session"
+                    className={classes.link}
                     description="Additional information"
                     href='/sessions'
                     active={active == 'sessions' ? true : false}
                     icon={
-                        <IconDatabaseImport size="35" variant="filled" color="red">
+                        <IconDatabaseImport size="20" variant="filled" color="red">
                         </IconDatabaseImport>
                     }
                 />
                 <NavLink
                     component='a'
                     label="Browser"
+                    className={classes.link}
                     description="Additional information"
                     href='/browsers'
                     active={active == 'browsers' ? true : false}
                     icon={
-                        <IconScreenShare size="35" variant="filled" color="red">
+                        <IconScreenShare size="20" variant="filled" color="red">
                         </IconScreenShare>
                     }
                 />
                 <NavLink
                     component='a'
                     label="Launch"
+                    className={classes.link}
                     description="Additional information"
                     href='/share'
                     active={active == 'share' ? true : false}
                     icon={
-                        <IconShare size="35" variant="filled" color="red">
+                        <IconShare size="20" variant="filled" color="red">
                         </IconShare>
                     }
                 />
                 <NavLink
 
+                    className={classes.link}
                     label="Messages"
                     icon={
-                        <IconMessage2 size="35" variant="filled" color="red">
+                        <IconMessage2 size="20" variant="filled" color="blue">
                         </IconMessage2>
                     }
                 />
                 <NavLink
+                    className={classes.link}
                     component='a'
                     label="UserManagement"
                     description="Additional information"
                     href='/user'
                     active={active == 'user' ? true : false}
                     icon={
-                        <IconUserPlus size="35" variant="filled" color="red">
+                        <IconUserPlus size="20" variant="filled" color="blue">
                         </IconUserPlus>
                     }
                 />
@@ -211,7 +230,7 @@ export default function UserMenu({ initialState }) {
 
                     label="Security"
                     icon={
-                        <IconKey size="35" variant="filled" color="red">
+                        <IconKey size="20" variant="filled" color="black">
                         </IconKey>
                     }
                 />
@@ -228,6 +247,6 @@ export default function UserMenu({ initialState }) {
                     <span>Logout</span>
                 </a>
             </Navbar.Section>
-        </Navbar>
+        </Navbar >
     );
 }

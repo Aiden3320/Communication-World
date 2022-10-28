@@ -1,12 +1,20 @@
 import { SessionProvider } from "next-auth/react"
+import { MantineProvider, ColorSchemeProvider, ColorScheme } from "@mantine/core";
 import { wrapper } from "../store/store";
 function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }) {
   return (
+
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <ColorSchemeProvider>
+        <MantineProvider withGlobalStyles withNormalizeCSS >
+          <Component {...pageProps} />
+        </MantineProvider>
+
+      </ColorSchemeProvider>
+
 
     </SessionProvider>
   )
