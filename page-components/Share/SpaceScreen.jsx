@@ -9,7 +9,6 @@ export default function SpaceScreen() {
     useEffect(() => {
         if (typeof window !== "undefined") {
             {
-                console.log('AAA');
                 setIsBrowser(true);
             }
         }
